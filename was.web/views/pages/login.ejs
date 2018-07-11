@@ -1,0 +1,47 @@
+<% include ../partials/header2%>
+
+
+<div id="carga" class="text-center oculta">
+  <img src="/img/carga.gif" alt="" style="margin-top:200px;">
+</div>
+<section class="dzsparallaxer auto-init height-is-based-on-content use-loading mode-scroll loaded dzsprx-readyall" data-options="{direction: &quot;reverse&quot;, settings_mode_oneelement_max_offset: &quot;150&quot;}" style="width: 100%;">
+      <div class="divimage dzsparallaxer--target w-100 g-bg-pos-bottom-center" style="height: 120%; background-image: url(img-temp/back3.png); transform: translate3d(0px, -83.5178px, 0px);"></div>
+
+      <div class="container g-py-100">
+        <div class="row justify-content-center">
+          <div class="col-sm-8 col-lg-5">
+            <div class="g-bg-white rounded g-py-40 g-px-30">
+              <header class="text-center mb-4">
+                <h2 class="h2 g-color-black g-font-weight-600">Iniciar Sesión</h2>
+              </header>   
+
+              <!-- Form -->
+              <form class="g-py-15">
+                <div class="mb-4">
+                  <input class="form-control g-color-black g-bg-white g-bg-white--focus g-brd-gray-light-v4 g-brd-primary--hover rounded g-py-15 g-px-15" type="email" placeholder="Email" id="email">
+                </div>
+
+                <div class="g-mb-35">
+                  <input class="form-control g-color-black g-bg-white g-bg-white--focus g-brd-gray-light-v4 g-brd-primary--hover rounded g-py-15 g-px-15 mb-3" type="password" placeholder="Contraseña" id="contraseña">
+                  <div class="row justify-content-between">
+                    <div class="col align-self-center text-right">
+                      <a class="g-font-size-12" href="#!">Olvidaste la contraseña?</a>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-4">
+                  <button class="btn btn-md btn-block u-btn-primary rounded g-py-13" id="inicia" type="button">Iniciar Sesión</button>
+                </div>
+              </form>
+              <!-- End Form -->
+
+              <footer class="text-center">
+                <p class="g-color-gray-dark-v5 g-font-size-13 mb-0">No tienes una cuenta? <a class="g-font-weight-600" href="/registro">Registrate</a>
+                </p>
+              </footer>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% include ../partials/footer%>

@@ -1,0 +1,35 @@
+<% include ../partials/header %>
+<script type="text/javascript">
+  $(document).on('ready', function () {
+    var cookie = $.cookie("user_doc");
+    if (cookie == null) {
+      $("#sideNav").attr('hidden',true);
+    }else{
+      console.log('SI ESTA LOGUEADO');
+      $("#conte1").removeClass('g-pa-20');
+      $(".titulito").text('Bienvenido');
+      $(".div_botones").attr('hidden',true);
+      $(".sec").css({'background-image':'none'});
+    }
+
+  });
+</script>
+
+<section class="g-flex-centered g-bg-pos-center g-bg-img-hero g-py-150 sec" style="background-image: url(img-temp/back3.png);width: 100%;" data-calc-target="#js-header">
+  <div class="container text-center g-z-index-1">
+    <div class="g-mb-25" data-animation="fadeInUp" data-animation-delay="500" data-animation-duration="1500">
+      <h2 class="h4 d-inline-block g-brd-bottom g-brd-2 g-brd-black g-color-black g-font-weight-600 text-uppercase g-pb-5">WasClient</h2>
+    </div>
+    <h3 class="g-color-black g-font-weight-700 g-font-size-40 g-font-size-55--md text-uppercase g-mb-40 titulito" data-animation="fadeInUp" data-animation-delay="800" data-animation-duration="1500">
+        Bienvenidos gestion de activos
+      </h3>
+    <div data-animation="fadeInUp" data-animation-delay="1100" data-animation-duration="1500" class="div_botones">
+      <a class="btn btn-lg u-btn-outline-black g-font-weight-600 g-font-size-13 text-uppercase g-rounded-50 mx-2 g-px-25 g-py-15 g-mb-20" href="#!">Saber más</a>
+      <a class="btn btn-lg u-btn-primary g-font-weight-600 g-font-size-13 text-uppercase g-rounded-50 mx-2 g-px-25 g-py-15 g-mb-20" href="/login">Comienza ahora</a>
+    </div>
+  </div>
+</section>
+<script type="text/javascript">
+  $.HSCore.components.HSOnScrollAnimation.init('[data-animation]');
+</script>
+

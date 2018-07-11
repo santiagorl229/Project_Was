@@ -1,0 +1,216 @@
+<% include ../partials/header2%>
+<script type="text/javascript">
+  $(document).on('ready', function () {
+
+      var rol= ip_server+"api/rol";
+      $.getJSON(rol, function(response){
+          $.each(response.roles, function(key, datos){
+              $("#checkboxRol").append("<option value=" + datos.idrol + ">" + datos.nombre + "</option>"); //create table
+          });
+      });
+
+
+          $('#loguin').click(function(){
+              window.location.href='/login';
+          })
+
+
+      $("#guardar").click(function(){
+       var email = $("#email").val();
+        var contraseña = $("#contraseña").val();
+        var iden = $("#identificacion").val();
+      if (email != "" && contraseña != "" && iden != "") {
+            var busca_identi = ip_server+"api/busca_conductor?numero_documento="+iden;
+        $.getJSON(busca_identi).done( function(response) {
+          if (response.data != null) {
+            crea(email,contraseña,iden,0);
+          }else{
+            var busca_identi2 = ip_server+"api/busca_empresa?nit="+iden;
+            $.getJSON(busca_identi2).done( function(response) {
+                if (response.data != null) {
+                  crea(email,contraseña,iden,1);
+                }else{
+                  var newNoty = new Noty({
+                    "type": "error",
+                    "layout": "topCenter",
+                    "timeout": "5000",
+                    "animation": {
+                      "open": "animated flipInX",
+                      "close": "animated fadeOut"
+                    },
+                    "closeWith": [
+                      "click"
+                    ],
+                    "text": "<div class=\"g-mr-20\"><div class=\"noty_body__icon\"><i class=\"icon-media-066 u-line-icon-pro\" style=\"color:#ff0000;\"></i></div></div><div><b>Error</b><br>Error al registrarse, número de identificación no encontrado. Empresas/Conductores</div>",
+                    "theme": "unify--v1--light"
+                  }).show();
+                }
+            });
+          }
+        });
+        /**/
+      }
+    });
+
+  //////////--------> Segmento 1
+  });
+
+
+
+  //////// FUNCION CREA //////////////////////////////////////
+  function crea(email,contraseña,iden,tipo_user){
+    if (tipo_user == 1) {
+      var t_u = "EmpresaAdmin";
+    }else{
+      var t_u = "Conductor";
+    }
+    var busca_tipo_user = ip_server+"api/busca_tipo?nombre="+t_u;
+    $.getJSON(busca_tipo_user).done( function(response) {
+      datos = {
+        email: email,
+        password: contraseña,
+        identificacion: iden,
+        tipouser_id: parseInt(response.data.id)
+      }
+      $.post(ip_server+"api/users", {
+          user : datos
+      }).done (function(response) {
+        $.cookie("user_doc", JSON.stringify({"user_doc":response.data.identificacion}));
+        var busca_user = ip_server+"api/busca_user?identificacion="+response.data.identificacion;
+        $.getJSON(busca_user).done( function(response2) {
+          $.cookie("user_id", JSON.stringify({"user_id":response2.data.id}));
+          if (response2.data.tipouser == "Conductor") {
+            var busca_con = ip_server+"api/busca_conductor?numero_documento="+response.data.identificacion;
+            $.getJSON(busca_con).done( function(response3) {
+              $.cookie("user_tipo", JSON.stringify({"user_tipo":"Conductor", "referencia_id": response3.data.id}));
+              bien();
+              setTimeout(function(){
+                window.location.href = "/";
+              }, 1500);
+            });
+          }else if (response2.data.tipouser == "EmpresaAdmin") {
+            var busca_em = ip_server+"api/busca_empresa?nit="+response.data.identificacion;
+            $.getJSON(busca_em).done( function(response3) {
+              $.cookie("user_tipo", JSON.stringify({"user_tipo": "EmpresaAdmin", "referencia_id": response3.data.id}));
+              bien();
+              setTimeout(function(){
+                window.location.href = "/";
+              }, 1500);
+            });
+          }else if (response2.data.tipouser == "SuperAdmin") {
+            $.cookie("user_tipo", JSON.stringify({"user_tipo":"SuperAdmin"}));
+            bien();
+            setTimeout(function(){
+              window.location.href = "/";
+            }, 1500);
+          }
+        });
+      }).error (function(response) {
+        var newNoty = new Noty({
+          "type": "error",
+          "layout": "topCenter",
+          "timeout": "3000",
+          "animation": {
+            "open": "animated flipInX",
+            "close": "animated fadeOut"
+          },
+          "closeWith": [
+            "click"
+          ],
+          "text": "<div class=\"g-mr-20\"><div class=\"noty_body__icon\"><i class=\"icon-media-066 u-line-icon-pro\" style=\"color:red;\"></i></div></div><div><b>Error</b><br>Error al registrarse, por favor verifica los campos.</div>",
+          "theme": "unify--v1--light"
+        }).show();
+      });
+    });
+
+  } ///// FUNCION CREA ////////////////////////////////
+
+
+
+/////////////////////////////////////// FUNCION BIEN 
+  function bien(){
+    var newNoty = new Noty({
+      "type": "success",
+      "layout": "topRight",
+      "timeout": "2000",
+      "animation": {
+        "open": "animated jackInTheBox",
+        "close": "animated bounceOutUp"
+      },
+      "closeWith": [
+        "click"
+      ],
+      "text": "<div class=\"g-mr-20\"><div class=\"noty_body__icon\"><i class=\"hs-admin-check\"></i></div></div><div>Mensaje<br>Te has registrado exitosamente.</div>",
+      "theme": "unify--v1--light"
+    }).show();
+  }
+
+//////////////////////////////////  FUNCION BIEN 
+
+</script>
+
+<section class="dzsparallaxer auto-init height-is-based-on-content use-loading mode-scroll loaded dzsprx-readyall" data-options="{direction: &quot;reverse&quot;, settings_mode_oneelement_max_offset: &quot;150&quot;}" style="width: 100%;">
+      <div class="divimage dzsparallaxer--target w-100 g-bg-pos-bottom-center" style="height: 120%; background-image: url(img-temp/back3.png); transform: translate3d(0px, -83.5178px, 0px);"></div>
+
+      <div class="container g-py-100">
+        <div class="row justify-content-center">
+          <div class="col-sm-8 col-lg-7">
+            <div class="g-bg-white rounded g-py-40 g-px-30">
+              <header class="text-center mb-4">
+                <h2 class="h2 g-color-black g-font-weight-600">Registro</h2>
+              </header>
+  <form>
+    <div class="row">
+      <div class="col">
+      <input class="form-control g-color-black g-bg-white g-bg-white--focus g-brd-gray-light-v4 g-brd-primary--hover rounded g-py-15 g-px-15" type="text" placeholder="Nombre Usuario" id="nombreUsuario">
+      </div>
+      <div class="col">
+        <input class="form-control g-color-black g-bg-white g-bg-white--focus g-brd-gray-light-v4 g-brd-primary--hover rounded g-py-15 g-px-15" type="password" placeholder="Contraseña" id="contraseña">
+          </div>
+        </div>
+              <hr>
+      <div class="row">
+          <div class="col">
+          <input class="form-control g-color-black g-bg-white g-bg-white--focus g-brd-gray-light-v4 g-brd-primary--hover rounded g-py-15 g-px-15" type="text" placeholder="Nombre" id="nombre">
+      </div>
+          <div class="col">
+            <input class="form-control g-color-black g-bg-white g-bg-white--focus g-brd-gray-light-v4 g-brd-primary--hover rounded g-py-15 g-px-15" type="text" placeholder="Apellidos" id="apellido">
+    </div>
+      </div>
+          <hr>
+          <div class="row">
+             <div class="col">
+                <input class="form-control g-color-black g-bg-white g-bg-white--focus g-brd-gray-light-v4 g-brd-primary--hover rounded g-py-15 g-px-15" type="email" placeholder="Email" id="email">
+              </div>
+              <div class="col">
+
+                <select  class="form-control" id="checkboxRol" >
+                    <option value="0">Seleccione un Rol</option>
+                </select>
+
+              </div>   
+          </div>
+          <hr>
+          <hr>
+      <div class="row">
+             <div class="col">
+               <button class="btn btn-md btn-block u-btn-primary rounded g-py-13" id="guardar" type="button">Guardar</button>
+              </div>
+              <div class="col">
+                  <button class="btn btn-md btn-block u-btn-primary rounded g-py-13" id="loguin" type="button">Volver Loguin</button>
+              </div>   
+          </div>
+          </form>
+          <hr>
+          <hr>
+             <footer class="text-center">
+               <p class="g-color-gray-dark-v5 g-font-size-13 mb-0">Ya tienes una cuenta? <a class="g-font-w"
+                                                                                            href="/login">Inicia sesión</a>
+                  </p>
+                 </footer>
+               </div>
+              </div>
+             </div>
+            </div>
+           </section>
+     <% include ../partials/footer%>
